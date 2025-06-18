@@ -1,0 +1,4 @@
+../hal/source/gpio_driver.c:16:6:GPIO_Clock	7
+../hal/source/gpio_driver.c:43:6:GPIO_Init	3
+../hal/source/gpio_driver.c:93:6:GPIO_Deinit	3
+../hal/source/gpio_driver.c:107:9:GPIO_ReadfromInput_pin	1
