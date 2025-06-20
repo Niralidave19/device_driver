@@ -21,10 +21,19 @@
 #define GPIOA_BASE_ADDRESS AHB1_BASE_ADDRESS + (0x0000)
 #define GPIOB_BASE_ADDRESS AHB1_BASE_ADDRESS + (0x0400)
 
+typedef enum
+{
+	GPIO_ID_A,
+	GPIO_ID_B,
+	GPIO_ID_C,
+	GPIO_ID_D,
+	GPIO_ID_E,
+	GPIO_ID_H
+}gpio_port_def_t;
 //for each GPIO port, we type-cast it to this type
 
-#define GPIOA (GPIO_Reg_def_t*)GPIOA_BASE_ADDRESS
-#define GPIOB (GPIO_Reg_def_t*)GPIOA_BASE_ADDRESS
+#define GPIOA (volatile GPIO_Reg_def_t*)GPIOA_BASE_ADDRESS
+#define GPIOB (volatile GPIO_Reg_def_t*)GPIOB_BASE_ADDRESS
 
 //RCC Base memory address
 #define RCC_BASE_ADDRESS 0x40023800u
@@ -72,12 +81,12 @@
 //RCC base address type-casted to the type RCC_Reg_def_t
 #define RCC ((RCC_Reg_def_t*)RCC_BASE_ADDRESS)
 //GPIO A and GPIO B clock bits are in register: RCC_AHB1RSTR : Bit 0 (GPIO A) Bit 1(GPIO B) : Reset value is 0
-#define gpioA_clock_enable() RCC->rcc_ahb1rstr = RCC->rcc_ahb1rstr | (1<<0)
-#define gpioB_clock_enable() RCC->rcc_ahb1rstr = RCC->rcc_ahb1rstr | (1<<1)
+#define GPIOA_clock_enable() RCC->rcc_ahb1rstr = RCC->rcc_ahb1rstr | (1<<0)
+#define GPIOB_clock_enable() RCC->rcc_ahb1rstr = RCC->rcc_ahb1rstr | (1<<1)
 
 //GPIO A and GPIO B disable the RCC bits
-#define gpioA_clock_disable() RCC->rcc_ahb1rstr = ~(RCC->rcc_ahb1rstr & (1<<0))
-#define gpioB_clock_disable() RCC->rcc_ahb1rstr = ~(RCC->rcc_ahb1rstr & (1<<1))
+#define GPIOA_clock_disable() RCC->rcc_ahb1rstr = ~(RCC->rcc_ahb1rstr & (1<<0))
+#define GPIOB_clock_disable() RCC->rcc_ahb1rstr = ~(RCC->rcc_ahb1rstr & (1<<1))
 
 
 #endif /* PUBLIC_STM32F446XX_H_ */
