@@ -1,0 +1,6 @@
+../hal/source/uart2_driver.c:12:6:UART_clock	4	static
+../hal/source/uart2_driver.c:18:26:UART_GetPort	4	static
+../hal/source/uart2_driver.c:22:6:USART_Init	32	static
+../hal/source/uart2_driver.c:66:6:uart_command	40	static
+../hal/source/uart2_driver.c:82:10:uart_receive	24	static
+../hal/source/uart2_driver.c:112:6:USART2_Write	24	static

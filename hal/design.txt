@@ -1,0 +1,17 @@
+void GPIO_Init(gpio_port_def_t GPIO_ID, uint8_t GPIO_PinNumber,uint8_t GPIO_PinMode,
+			   uint8_t GPIO_PinSpeed, uint8_t GPIO_pullup_down_control, uint8_t GPIO_PinOpType,
+		       uint8_t GPIO_AltFunMode)
+		       
+1. Instead of having so many arguements, can we give a structure as input?
+So basically when application needs to call this function, it will send a structure as input to the function? 
+
+2. I have defined an enum, which would only say the GPIO_PORT_ID 
+   Internally based on the ID, a function is returned to return a pointer to the starting address of the register.
+   
+Linker script and Startup.c file 
+
+.data segment : Initialised globals  : at startup, these are copied from flash to sram 
+.bss  segment : Uinitialised globals : at startup, these are set to zero  
+.text segment : go to flash memory 
+.rodata       : go to flash memory 
+

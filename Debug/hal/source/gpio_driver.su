@@ -1,0 +1,6 @@
+../hal/source/gpio_driver.c:23:6:GPIO_Clock	16	static
+../hal/source/gpio_driver.c:86:26:GPIO_GetPort	16	static
+../hal/source/gpio_driver.c:113:6:GPIO_Init	24	static
+../hal/source/gpio_driver.c:177:6:delay	16	static
+../hal/source/gpio_driver.c:184:9:GPIO_ReadfromInput_pin	24	static
+../hal/source/gpio_driver.c:191:9:GPIO_WritetoPin	32	static

@@ -1,0 +1,2 @@
+../Src/startup.c:26:6:Reset_Handler	3
+../Src/startup.c:51:6:Default_Handler	1
