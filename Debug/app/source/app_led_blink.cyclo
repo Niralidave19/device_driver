@@ -1,0 +1,2 @@
+../app/source/app_led_blink.c:13:6:app_led_blink_init	1
+../app/source/app_led_blink.c:30:6:app_led_blink_update	1

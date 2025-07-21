@@ -113,6 +113,7 @@ volatile GPIO_Reg_def_t* GPIO_GetPort(gpio_port_def_t GPIO_ID){
 void GPIO_Init(gpio_config_t gpio){
 
 	uint32_t temp = 0;
+	GPIO_Clock(gpio.port_id,gpio.enable);
 	/* Get the GPIO register for the GPIO_ID */
 	volatile GPIO_Reg_def_t *pGPIOx = GPIO_GetPort(gpio.port_id);
 

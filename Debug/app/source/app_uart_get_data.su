@@ -1,0 +1,2 @@
+../app/source/app_uart_get_data.c:12:6:app_address_req_init	8	static
+../app/source/app_uart_get_data.c:16:6:app_address_req_update	32	static

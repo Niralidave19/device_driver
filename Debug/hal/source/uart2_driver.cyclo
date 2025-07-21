@@ -1,6 +1,5 @@
-../hal/source/uart2_driver.c:12:6:UART_clock	1
-../hal/source/uart2_driver.c:18:26:UART_GetPort	1
-../hal/source/uart2_driver.c:22:6:USART_Init	3
-../hal/source/uart2_driver.c:66:6:uart_command	4
-../hal/source/uart2_driver.c:82:10:uart_receive	3
-../hal/source/uart2_driver.c:112:6:USART2_Write	3
+../hal/source/uart2_driver.c:16:6:UART_clock	1
+../hal/source/uart2_driver.c:22:26:UART_GetPort	1
+../hal/source/uart2_driver.c:26:6:USART_Init	3
+../hal/source/uart2_driver.c:108:10:uart_receive	3
+../hal/source/uart2_driver.c:133:6:uart_write	2

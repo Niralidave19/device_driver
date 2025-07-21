@@ -4,11 +4,15 @@
  *  Created on: Jul 1, 2025
  *      Author: niral
  */
-#include"uart_types.h"
+
 #include"uart_macros.h"
 #include"stm32f446xx.h"
+#include <stdint.h>
+#include "gpio_types.h"
+#include "gpio_proto.h"
+#include "uart_types.h"
+#include "uart_proto.h"
 
-static uint8_t bytes[10];
 void UART_clock(){
 	UART2_clock_enable();
 }
@@ -19,8 +23,41 @@ volatile UART_Reg_def_t* UART_GetPort(){
 	return (volatile UART_Reg_def_t*)USART2_BASE_ADDRESS;
 }
 
-void USART_Init(UART_config_t UART_config)
+void USART_Init()
 {
+	gpio_config_t         gpio_pin_tx;
+	gpio_config_t         gpio_pin_rx;
+	UART_config_t         UART_config;
+
+	gpio_pin_tx.port_id    = GPIO_ID_A;
+	gpio_pin_tx.mode       = GPIO_MODE_ALTFUN;
+	gpio_pin_tx.op_type    = GPIO_OP_PUSH_PULL;
+	gpio_pin_tx.op_speed   = GPIO_LOW_SPEED;
+	gpio_pin_tx.push_pull  = GPIO_PULL_UP;
+	gpio_pin_tx.alt_func   = GPIO_AF7;
+	gpio_pin_tx.enable     = GPIO_ENABLE;
+	gpio_pin_tx.pin_number = 2;                     //PA2 for TX
+
+	gpio_pin_rx.port_id    = GPIO_ID_A;
+	gpio_pin_rx.mode       = GPIO_MODE_ALTFUN;
+	gpio_pin_rx.op_type    = GPIO_OP_PUSH_PULL;
+	gpio_pin_rx.op_speed   = GPIO_LOW_SPEED;
+	gpio_pin_rx.push_pull  = GPIO_PULL_UP;
+	gpio_pin_rx.alt_func   = GPIO_AF7;
+	gpio_pin_rx.enable     = GPIO_ENABLE;
+	gpio_pin_rx.pin_number = 3;                    //PA3 for RX
+
+	UART_config.enable_clk_cntrl  = 0;
+	UART_config.enable_flow_cntrl = 0;
+	UART_config.baud = 9600;
+	UART_config.pclk = 45000000;
+
+	GPIO_Clock(gpio_pin_tx.port_id,gpio_pin_tx.enable);
+	GPIO_Clock(gpio_pin_rx.port_id,gpio_pin_rx.enable);
+	UART_clock();
+
+	GPIO_Init(gpio_pin_tx);
+	GPIO_Init(gpio_pin_rx);
 	/*Get the peripheral address of USART */
 	volatile UART_Reg_def_t* USART = UART_GetPort();
 
@@ -63,63 +100,42 @@ void USART_Init(UART_config_t UART_config)
 		 USART->usart_cr3  |= (1 << 9);   // RTSE
 	 }
 }
-void uart_command(uint8_t *rx_buff)
-{
-	if((rx_buff[0]!=0x7E)||(rx_buff[9]!=0x7F)){
-		return;
-	}
-	uint8_t cmd_id   = rx_buff[1];
-	uint8_t length   = rx_buff[2];
-	uint8_t* payload = &rx_buff[3];
-	switch(cmd_id){
-	/*Get data stored at a particular address */
-	case 0x01:
-		uint32_t addr = payload[0] | payload[1]<<8 | payload[2]<<16 | payload[3]<<24;
-		uint32_t value = *((uint32_t*)addr);
-		uint8_t* tx_buff = (uint8_t)value;
-		USART2_Write(tx_buff,1);
-	}
-}
-uint8_t* uart_receive(){
-	/*Get the peripheral address of USART */
+
+/* Function   : uart_receive()
+ * Description: Read what is being received in the UART port - 8 bits of data is read/9 bits
+ * depending on the word length
+ * Parameters : */
+uint16_t uart_receive(){
+
+	/* Get the peripheral address of USART */
 	volatile UART_Reg_def_t* USART = UART_GetPort();
 
-	uint32_t address;
 	/* Polling is used for reading the data
 	 * In this method, we tell the processor to keep checking the RXNE bit (5th bit of SR reg)
 	 * if the bit is set we read the data from the DR register
 	 */
-	/* Assuming 10 Bytes of data are received in one single frame */
-	for(int i = 0;i<10;i++)
-	{
-		while(!((USART->usart_sr) & (1<<5)));
-		bytes[i] = (uint8_t)USART->usart_dr & 0xFF;
-	}
-	address = bytes[0] | bytes[1]<<8 | bytes[2]<<16 | bytes[3]<<24;
-	uart_command(bytes);
-	return bytes;
-	/*
-	 *
-	while(!((USART->usart_sr) & (1<<5)))
-		{
-			uint8_t data = USART->usart_dr;
-			printf("Received: 0x%02X\n", data);
-		}*/
 
-	/*we read the data once received and typecast it to uint8_t
-	 *because we return only 8 bits of data */
-	/*return (uint8_t)(USART->usart_dr & 0xFF);*/
+	while(!((USART->usart_sr) & (1<<5)));
+
+	/* After receiving the data, check the word length and type-cast to return
+	 * the data value */
+	if(USART->usart_cr1 & (1<<12)){
+		return (uint16_t)(USART->usart_dr & 0x1FF);
+	}
+	else{
+		return (uint8_t)(USART->usart_dr & 0xFF);
+	}
 }
 
-void USART2_Write(uint8_t* ch,uint8_t size) {
+/* Function   : uart_receive()
+ * Description: Write 1 Byte of data into the UART Port, when TXE = 1
+ * Parameters : */
+void uart_write(uint8_t ch) {
 	/*Get the peripheral address of USART */
 	volatile UART_Reg_def_t* USART = UART_GetPort();
   // Wait until TXE == 1
-	for(int i = 0;i<size;i++)
-	{
-	    while (!(USART->usart_sr & (1 << 7)));
-		USART->usart_dr = ch[i];
-	}
+	while (!(USART->usart_sr & (1 << 7)));
+	USART->usart_dr = ch;
 }
 
 
