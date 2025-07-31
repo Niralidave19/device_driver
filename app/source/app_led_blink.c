@@ -6,12 +6,13 @@
 #include "gpio_types.h"
 #include "gpio_proto.h"
 #include "gpio_macros.h"
+
+gpio_config_t      gpio_pin;
 /***********************************************************************************
  * app_led_blink_init.c
  * Initializes the GPIO pins with the respective drivers / lower layer support
  ***********************************************************************************/
 void app_led_blink_init(){
-	gpio_config_t      gpio_pin;
 	gpio_pin.port_id    = GPIO_ID_A;
 	gpio_pin.mode       = GPIO_MODE_OUT;
 	gpio_pin.op_type    = GPIO_OP_PUSH_PULL;

@@ -1,2 +1,2 @@
-../app/source/app_led_blink.c:13:6:app_led_blink_init	16	static
-../app/source/app_led_blink.c:30:6:app_led_blink_update	24	static
+../app/source/app_led_blink.c:15:6:app_led_blink_init	8	static
+../app/source/app_led_blink.c:31:6:app_led_blink_update	24	static

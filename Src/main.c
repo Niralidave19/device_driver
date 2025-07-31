@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 #include "app_proto.h"
-
+#include "flash_proto.h"
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
@@ -53,6 +53,7 @@ int main(void)
 int main(void)
 {
 	app_init();
+	Flash_Write();
 	while(1){
 		/* calling application update routine */
 		app_update();

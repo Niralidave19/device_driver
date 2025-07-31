@@ -5,14 +5,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../hal/source/flash.c \
 ../hal/source/gpio_driver.c \
 ../hal/source/uart2_driver.c 
 
 OBJS += \
+./hal/source/flash.o \
 ./hal/source/gpio_driver.o \
 ./hal/source/uart2_driver.o 
 
 C_DEPS += \
+./hal/source/flash.d \
 ./hal/source/gpio_driver.d \
 ./hal/source/uart2_driver.d 
 
@@ -24,7 +27,7 @@ hal/source/%.o hal/source/%.su hal/source/%.cyclo: ../hal/source/%.c hal/source/
 clean: clean-hal-2f-source
 
 clean-hal-2f-source:
-	-$(RM) ./hal/source/gpio_driver.cyclo ./hal/source/gpio_driver.d ./hal/source/gpio_driver.o ./hal/source/gpio_driver.su ./hal/source/uart2_driver.cyclo ./hal/source/uart2_driver.d ./hal/source/uart2_driver.o ./hal/source/uart2_driver.su
+	-$(RM) ./hal/source/flash.cyclo ./hal/source/flash.d ./hal/source/flash.o ./hal/source/flash.su ./hal/source/gpio_driver.cyclo ./hal/source/gpio_driver.d ./hal/source/gpio_driver.o ./hal/source/gpio_driver.su ./hal/source/uart2_driver.cyclo ./hal/source/uart2_driver.d ./hal/source/uart2_driver.o ./hal/source/uart2_driver.su
 
 .PHONY: clean-hal-2f-source
 

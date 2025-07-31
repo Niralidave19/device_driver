@@ -7,5 +7,6 @@
 "./app/source/app_led_blink.o"
 "./app/source/app_uart_get_data.o"
 "./app/source/common/app_request_receive.o"
+"./hal/source/flash.o"
 "./hal/source/gpio_driver.o"
 "./hal/source/uart2_driver.o"
