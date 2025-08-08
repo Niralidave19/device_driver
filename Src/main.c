@@ -53,9 +53,10 @@ int main(void)
 int main(void)
 {
 	app_init();
-	Flash_Write();
+	//Flash_Write();
 	while(1){
-		/* calling application update routine */
+		/* calling application update routine*/
+		check_receive();
 		app_update();
 	}
     /* Loop forever */

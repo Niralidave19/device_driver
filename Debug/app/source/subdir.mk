@@ -7,16 +7,19 @@
 C_SRCS += \
 ../app/source/app.c \
 ../app/source/app_led_blink.c \
+../app/source/app_uart_flash.c \
 ../app/source/app_uart_get_data.c 
 
 OBJS += \
 ./app/source/app.o \
 ./app/source/app_led_blink.o \
+./app/source/app_uart_flash.o \
 ./app/source/app_uart_get_data.o 
 
 C_DEPS += \
 ./app/source/app.d \
 ./app/source/app_led_blink.d \
+./app/source/app_uart_flash.d \
 ./app/source/app_uart_get_data.d 
 
 
@@ -27,7 +30,7 @@ app/source/%.o app/source/%.su app/source/%.cyclo: ../app/source/%.c app/source/
 clean: clean-app-2f-source
 
 clean-app-2f-source:
-	-$(RM) ./app/source/app.cyclo ./app/source/app.d ./app/source/app.o ./app/source/app.su ./app/source/app_led_blink.cyclo ./app/source/app_led_blink.d ./app/source/app_led_blink.o ./app/source/app_led_blink.su ./app/source/app_uart_get_data.cyclo ./app/source/app_uart_get_data.d ./app/source/app_uart_get_data.o ./app/source/app_uart_get_data.su
+	-$(RM) ./app/source/app.cyclo ./app/source/app.d ./app/source/app.o ./app/source/app.su ./app/source/app_led_blink.cyclo ./app/source/app_led_blink.d ./app/source/app_led_blink.o ./app/source/app_led_blink.su ./app/source/app_uart_flash.cyclo ./app/source/app_uart_flash.d ./app/source/app_uart_flash.o ./app/source/app_uart_flash.su ./app/source/app_uart_get_data.cyclo ./app/source/app_uart_get_data.d ./app/source/app_uart_get_data.o ./app/source/app_uart_get_data.su
 
 .PHONY: clean-app-2f-source
 

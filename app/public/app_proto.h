@@ -15,3 +15,5 @@ void app_init();
  * Update routine of all the apps called here
  ***********************************************************************************/
 void app_update();
+
+void check_receive();
