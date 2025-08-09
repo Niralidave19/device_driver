@@ -25,6 +25,5 @@ SUBDIRS := \
 Src \
 Startup \
 app/source \
-app/source/common \
 hal/source \
 

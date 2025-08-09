@@ -191,6 +191,20 @@ Discarded input sections
  .debug_macro   0x00000000      0x103 ./app/source/app_led_blink.o
  .debug_macro   0x00000000       0x6a ./app/source/app_led_blink.o
  .debug_macro   0x00000000      0x1df ./app/source/app_led_blink.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .group         0x00000000        0xc ./app/source/app_request_receive.o
+ .debug_macro   0x00000000      0xac0 ./app/source/app_request_receive.o
+ .debug_macro   0x00000000       0x22 ./app/source/app_request_receive.o
+ .debug_macro   0x00000000       0x8e ./app/source/app_request_receive.o
+ .debug_macro   0x00000000       0x51 ./app/source/app_request_receive.o
+ .debug_macro   0x00000000      0x103 ./app/source/app_request_receive.o
+ .debug_macro   0x00000000       0x6a ./app/source/app_request_receive.o
+ .debug_macro   0x00000000      0x1df ./app/source/app_request_receive.o
  .group         0x00000000        0xc ./app/source/app_uart_flash.o
  .group         0x00000000        0xc ./app/source/app_uart_flash.o
  .group         0x00000000        0xc ./app/source/app_uart_flash.o
@@ -221,20 +235,6 @@ Discarded input sections
  .debug_macro   0x00000000      0x103 ./app/source/app_uart_get_data.o
  .debug_macro   0x00000000       0x6a ./app/source/app_uart_get_data.o
  .debug_macro   0x00000000      0x1df ./app/source/app_uart_get_data.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .group         0x00000000        0xc ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000      0xac0 ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000       0x22 ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000       0x8e ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000       0x51 ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000      0x103 ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000       0x6a ./app/source/common/app_request_receive.o
- .debug_macro   0x00000000      0x1df ./app/source/common/app_request_receive.o
  .group         0x00000000        0xc ./hal/source/flash.o
  .group         0x00000000        0xc ./hal/source/flash.o
  .group         0x00000000        0xc ./hal/source/flash.o
@@ -317,9 +317,9 @@ LOAD ./Src/sysmem.o
 LOAD ./Startup/startup_stm32f446retx.o
 LOAD ./app/source/app.o
 LOAD ./app/source/app_led_blink.o
+LOAD ./app/source/app_request_receive.o
 LOAD ./app/source/app_uart_flash.o
 LOAD ./app/source/app_uart_get_data.o
-LOAD ./app/source/common/app_request_receive.o
 LOAD ./hal/source/flash.o
 LOAD ./hal/source/gpio_driver.o
 LOAD ./hal/source/uart2_driver.o
@@ -521,32 +521,32 @@ LOAD C:/ST/STM32CubeIDE_1.16.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text.app_led_blink_update
                 0x08000600       0x44 ./app/source/app_led_blink.o
                 0x08000600                app_led_blink_update
- .text          0x08000644        0x0 ./app/source/app_uart_flash.o
- .text.check_crc
-                0x08000644       0xb2 ./app/source/app_uart_flash.o
-                0x08000644                check_crc
- .text.check_receive
-                0x080006f6      0x106 ./app/source/app_uart_flash.o
-                0x080006f6                check_receive
- .text.app_uart_flash_update
-                0x080007fc       0xb4 ./app/source/app_uart_flash.o
-                0x080007fc                app_uart_flash_update
- .text          0x080008b0        0x0 ./app/source/app_uart_get_data.o
- .text.app_address_req_init
-                0x080008b0        0xc ./app/source/app_uart_get_data.o
-                0x080008b0                app_address_req_init
- .text.app_address_req_update
-                0x080008bc       0xac ./app/source/app_uart_get_data.o
-                0x080008bc                app_address_req_update
- .text          0x08000968        0x0 ./app/source/common/app_request_receive.o
+ .text          0x08000644        0x0 ./app/source/app_request_receive.o
  .text.app_req_frame
-                0x08000968       0x40 ./app/source/common/app_request_receive.o
-                0x08000968                app_req_frame
+                0x08000644       0x40 ./app/source/app_request_receive.o
+                0x08000644                app_req_frame
  .text.app_send_ACK
-                0x080009a8        0xe ./app/source/common/app_request_receive.o
-                0x080009a8                app_send_ACK
- .text          0x080009b6        0x0 ./hal/source/flash.o
- *fill*         0x080009b6        0x2 
+                0x08000684        0xe ./app/source/app_request_receive.o
+                0x08000684                app_send_ACK
+ .text          0x08000692        0x0 ./app/source/app_uart_flash.o
+ .text.check_crc
+                0x08000692       0xb2 ./app/source/app_uart_flash.o
+                0x08000692                check_crc
+ .text.check_receive
+                0x08000744      0x106 ./app/source/app_uart_flash.o
+                0x08000744                check_receive
+ *fill*         0x0800084a        0x2 
+ .text.app_uart_flash_update
+                0x0800084c       0xb4 ./app/source/app_uart_flash.o
+                0x0800084c                app_uart_flash_update
+ .text          0x08000900        0x0 ./app/source/app_uart_get_data.o
+ .text.app_address_req_init
+                0x08000900        0xc ./app/source/app_uart_get_data.o
+                0x08000900                app_address_req_init
+ .text.app_address_req_update
+                0x0800090c       0xac ./app/source/app_uart_get_data.o
+                0x0800090c                app_address_req_update
+ .text          0x080009b8        0x0 ./hal/source/flash.o
  .text.Flash_Write
                 0x080009b8      0x180 ./hal/source/flash.o
                 0x080009b8                Flash_Write
@@ -782,11 +782,11 @@ LOAD C:/ST/STM32CubeIDE_1.16.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .data          0x20000008        0x0 ./Startup/startup_stm32f446retx.o
  .data          0x20000008        0x0 ./app/source/app.o
  .data          0x20000008        0x0 ./app/source/app_led_blink.o
- .data          0x20000008        0x0 ./app/source/app_uart_flash.o
- .data          0x20000008        0x0 ./app/source/app_uart_get_data.o
- .data          0x20000008        0x0 ./app/source/common/app_request_receive.o
- .data.req_id   0x20000008        0x5 ./app/source/common/app_request_receive.o
+ .data          0x20000008        0x0 ./app/source/app_request_receive.o
+ .data.req_id   0x20000008        0x5 ./app/source/app_request_receive.o
                 0x20000008                req_id
+ .data          0x2000000d        0x0 ./app/source/app_uart_flash.o
+ .data          0x2000000d        0x0 ./app/source/app_uart_get_data.o
  .data          0x2000000d        0x0 ./hal/source/flash.o
  .data          0x2000000d        0x0 ./hal/source/gpio_driver.o
  .data          0x2000000d        0x0 ./hal/source/uart2_driver.o
@@ -846,9 +846,9 @@ LOAD C:/ST/STM32CubeIDE_1.16.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .bss           0x20000090        0x0 ./app/source/app_led_blink.o
  .bss.gpio_pin  0x20000090        0x8 ./app/source/app_led_blink.o
                 0x20000090                gpio_pin
+ .bss           0x20000098        0x0 ./app/source/app_request_receive.o
  .bss           0x20000098        0x0 ./app/source/app_uart_flash.o
  .bss           0x20000098        0x0 ./app/source/app_uart_get_data.o
- .bss           0x20000098        0x0 ./app/source/common/app_request_receive.o
  .bss           0x20000098        0x0 ./hal/source/flash.o
  .bss           0x20000098        0x0 ./hal/source/gpio_driver.o
  .bss           0x20000098        0x0 ./hal/source/uart2_driver.o
@@ -943,11 +943,11 @@ LOAD linker stubs
  .ARM.attributes
                 0x0000019a       0x34 ./app/source/app_led_blink.o
  .ARM.attributes
-                0x000001ce       0x34 ./app/source/app_uart_flash.o
+                0x000001ce       0x34 ./app/source/app_request_receive.o
  .ARM.attributes
-                0x00000202       0x34 ./app/source/app_uart_get_data.o
+                0x00000202       0x34 ./app/source/app_uart_flash.o
  .ARM.attributes
-                0x00000236       0x34 ./app/source/common/app_request_receive.o
+                0x00000236       0x34 ./app/source/app_uart_get_data.o
  .ARM.attributes
                 0x0000026a       0x34 ./hal/source/flash.o
  .ARM.attributes
@@ -1005,9 +1005,9 @@ LOAD linker stubs
  .comment       0x00000043       0x44 ./Src/sysmem.o
  .comment       0x00000043       0x44 ./app/source/app.o
  .comment       0x00000043       0x44 ./app/source/app_led_blink.o
+ .comment       0x00000043       0x44 ./app/source/app_request_receive.o
  .comment       0x00000043       0x44 ./app/source/app_uart_flash.o
  .comment       0x00000043       0x44 ./app/source/app_uart_get_data.o
- .comment       0x00000043       0x44 ./app/source/common/app_request_receive.o
  .comment       0x00000043       0x44 ./hal/source/flash.o
  .comment       0x00000043       0x44 ./hal/source/gpio_driver.o
  .comment       0x00000043       0x44 ./hal/source/uart2_driver.o
@@ -1019,9 +1019,9 @@ LOAD linker stubs
  .debug_info    0x000008bb      0x168 ./Src/sysmem.o
  .debug_info    0x00000a23       0xa9 ./app/source/app.o
  .debug_info    0x00000acc      0x32e ./app/source/app_led_blink.o
- .debug_info    0x00000dfa      0x312 ./app/source/app_uart_flash.o
- .debug_info    0x0000110c      0x1e6 ./app/source/app_uart_get_data.o
- .debug_info    0x000012f2      0x140 ./app/source/common/app_request_receive.o
+ .debug_info    0x00000dfa      0x140 ./app/source/app_request_receive.o
+ .debug_info    0x00000f3a      0x312 ./app/source/app_uart_flash.o
+ .debug_info    0x0000124c      0x1e6 ./app/source/app_uart_get_data.o
  .debug_info    0x00001432      0x119 ./hal/source/flash.o
  .debug_info    0x0000154b      0x65b ./hal/source/gpio_driver.o
  .debug_info    0x00001ba6      0x65a ./hal/source/uart2_driver.o
@@ -1033,9 +1033,9 @@ LOAD linker stubs
  .debug_abbrev  0x00000318       0xbc ./Src/sysmem.o
  .debug_abbrev  0x000003d4       0x5f ./app/source/app.o
  .debug_abbrev  0x00000433      0x144 ./app/source/app_led_blink.o
- .debug_abbrev  0x00000577      0x14a ./app/source/app_uart_flash.o
- .debug_abbrev  0x000006c1       0xf9 ./app/source/app_uart_get_data.o
- .debug_abbrev  0x000007ba       0xeb ./app/source/common/app_request_receive.o
+ .debug_abbrev  0x00000577       0xeb ./app/source/app_request_receive.o
+ .debug_abbrev  0x00000662      0x14a ./app/source/app_uart_flash.o
+ .debug_abbrev  0x000007ac       0xf9 ./app/source/app_uart_get_data.o
  .debug_abbrev  0x000008a5       0x90 ./hal/source/flash.o
  .debug_abbrev  0x00000935      0x14f ./hal/source/gpio_driver.o
  .debug_abbrev  0x00000a84      0x15e ./hal/source/uart2_driver.o
@@ -1054,11 +1054,11 @@ LOAD linker stubs
  .debug_aranges
                 0x00000138       0x28 ./app/source/app_led_blink.o
  .debug_aranges
-                0x00000160       0x30 ./app/source/app_uart_flash.o
+                0x00000160       0x28 ./app/source/app_request_receive.o
  .debug_aranges
-                0x00000190       0x28 ./app/source/app_uart_get_data.o
+                0x00000188       0x30 ./app/source/app_uart_flash.o
  .debug_aranges
-                0x000001b8       0x28 ./app/source/common/app_request_receive.o
+                0x000001b8       0x28 ./app/source/app_uart_get_data.o
  .debug_aranges
                 0x000001e0       0x20 ./hal/source/flash.o
  .debug_aranges
@@ -1081,11 +1081,11 @@ LOAD linker stubs
  .debug_rnglists
                 0x000000d2       0x19 ./app/source/app_led_blink.o
  .debug_rnglists
-                0x000000eb       0x22 ./app/source/app_uart_flash.o
+                0x000000eb       0x19 ./app/source/app_request_receive.o
  .debug_rnglists
-                0x0000010d       0x1a ./app/source/app_uart_get_data.o
+                0x00000104       0x22 ./app/source/app_uart_flash.o
  .debug_rnglists
-                0x00000127       0x19 ./app/source/common/app_request_receive.o
+                0x00000126       0x1a ./app/source/app_uart_get_data.o
  .debug_rnglists
                 0x00000140       0x14 ./hal/source/flash.o
  .debug_rnglists
@@ -1153,32 +1153,32 @@ LOAD linker stubs
  .debug_macro   0x00002a34       0x75 ./app/source/app.o
  .debug_macro   0x00002aa9       0x84 ./app/source/app_led_blink.o
  .debug_macro   0x00002b2d       0x76 ./app/source/app_led_blink.o
- .debug_macro   0x00002ba3       0xa1 ./app/source/app_uart_flash.o
- .debug_macro   0x00002c44       0x4c ./app/source/app_uart_flash.o
- .debug_macro   0x00002c90       0x6a ./app/source/app_uart_flash.o
- .debug_macro   0x00002cfa       0x7b ./app/source/app_uart_get_data.o
- .debug_macro   0x00002d75       0x69 ./app/source/common/app_request_receive.o
+ .debug_macro   0x00002ba3       0x69 ./app/source/app_request_receive.o
+ .debug_macro   0x00002c0c       0xa1 ./app/source/app_uart_flash.o
+ .debug_macro   0x00002cad       0x4c ./app/source/app_uart_flash.o
+ .debug_macro   0x00002cf9       0x6a ./app/source/app_uart_flash.o
+ .debug_macro   0x00002d63       0x7b ./app/source/app_uart_get_data.o
  .debug_macro   0x00002dde       0x8f ./hal/source/flash.o
  .debug_macro   0x00002e6d       0x46 ./hal/source/flash.o
  .debug_macro   0x00002eb3       0xa1 ./hal/source/gpio_driver.o
  .debug_macro   0x00002f54       0xb4 ./hal/source/uart2_driver.o
  .debug_macro   0x00003008       0x10 ./hal/source/uart2_driver.o
 
-.debug_line     0x00000000     0x447d
+.debug_line     0x00000000     0x4476
  .debug_line    0x00000000      0x4bd ./Src/main.o
  .debug_line    0x000004bd      0x48d ./Src/startup.o
  .debug_line    0x0000094a      0x8ad ./Src/syscalls.o
  .debug_line    0x000011f7      0x57e ./Src/sysmem.o
  .debug_line    0x00001775      0x4ed ./app/source/app.o
  .debug_line    0x00001c62      0x4b7 ./app/source/app_led_blink.o
- .debug_line    0x00002119      0x6fe ./app/source/app_uart_flash.o
- .debug_line    0x00002817      0x58c ./app/source/app_uart_get_data.o
- .debug_line    0x00002da3      0x461 ./app/source/common/app_request_receive.o
- .debug_line    0x00003204      0x5cc ./hal/source/flash.o
- .debug_line    0x000037d0      0x6d4 ./hal/source/gpio_driver.o
- .debug_line    0x00003ea4      0x5d9 ./hal/source/uart2_driver.o
+ .debug_line    0x00002119      0x45a ./app/source/app_request_receive.o
+ .debug_line    0x00002573      0x6fe ./app/source/app_uart_flash.o
+ .debug_line    0x00002c71      0x58c ./app/source/app_uart_get_data.o
+ .debug_line    0x000031fd      0x5cc ./hal/source/flash.o
+ .debug_line    0x000037c9      0x6d4 ./hal/source/gpio_driver.o
+ .debug_line    0x00003e9d      0x5d9 ./hal/source/uart2_driver.o
 
-.debug_str      0x00000000     0xa98c
+.debug_str      0x00000000     0xa985
  .debug_str     0x00000000     0x3bff ./Src/main.o
                                0x3d5f (size before relaxing)
  .debug_str     0x00003bff       0xd3 ./Src/startup.o
@@ -1191,17 +1191,17 @@ LOAD linker stubs
                                0x3d7d (size before relaxing)
  .debug_str     0x0000983c      0x816 ./app/source/app_led_blink.o
                                0x4556 (size before relaxing)
- .debug_str     0x0000a052      0x4cd ./app/source/app_uart_flash.o
+ .debug_str     0x0000a052       0x76 ./app/source/app_request_receive.o
+                               0x3d9b (size before relaxing)
+ .debug_str     0x0000a0c8      0x49a ./app/source/app_uart_flash.o
                                0x4242 (size before relaxing)
- .debug_str     0x0000a51f       0x35 ./app/source/app_uart_get_data.o
+ .debug_str     0x0000a562       0x35 ./app/source/app_uart_get_data.o
                                0x3e20 (size before relaxing)
- .debug_str     0x0000a554       0x4a ./app/source/common/app_request_receive.o
-                               0x3da2 (size before relaxing)
- .debug_str     0x0000a59e       0x22 ./hal/source/flash.o
+ .debug_str     0x0000a597       0x22 ./hal/source/flash.o
                                0x416e (size before relaxing)
- .debug_str     0x0000a5c0      0x284 ./hal/source/gpio_driver.o
+ .debug_str     0x0000a5b9      0x284 ./hal/source/gpio_driver.o
                                0x4edd (size before relaxing)
- .debug_str     0x0000a844      0x148 ./hal/source/uart2_driver.o
+ .debug_str     0x0000a83d      0x148 ./hal/source/uart2_driver.o
                                0x4729 (size before relaxing)
 
 .debug_frame    0x00000000      0xc60
@@ -1211,9 +1211,9 @@ LOAD linker stubs
  .debug_frame   0x00000324       0x34 ./Src/sysmem.o
  .debug_frame   0x00000358       0x48 ./app/source/app.o
  .debug_frame   0x000003a0       0x50 ./app/source/app_led_blink.o
- .debug_frame   0x000003f0       0x80 ./app/source/app_uart_flash.o
- .debug_frame   0x00000470       0x50 ./app/source/app_uart_get_data.o
- .debug_frame   0x000004c0       0x50 ./app/source/common/app_request_receive.o
+ .debug_frame   0x000003f0       0x50 ./app/source/app_request_receive.o
+ .debug_frame   0x00000440       0x80 ./app/source/app_uart_flash.o
+ .debug_frame   0x000004c0       0x50 ./app/source/app_uart_get_data.o
  .debug_frame   0x00000510       0x30 ./hal/source/flash.o
  .debug_frame   0x00000540       0xf8 ./hal/source/gpio_driver.o
  .debug_frame   0x00000638       0xbc ./hal/source/uart2_driver.o
