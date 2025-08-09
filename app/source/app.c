@@ -11,10 +11,10 @@ extern gpio_config_t gpio_pin;
 
 void app_init(){
 	app_address_req_init();
-	app_led_blink_init();
+	//app_led_blink_init();
 }
 
 void app_update(){
 	app_address_req_update();
-	app_led_blink_update(1,gpio_pin);
+	//app_led_blink_update(1,gpio_pin);
 }

@@ -53,10 +53,11 @@ int main(void)
 int main(void)
 {
 	app_init();
-	//Flash_Write();
+	check_receive();
 	while(1){
 		/* calling application update routine*/
-		check_receive();
+		/*check_receive();*/
+		/*app_address_req_update();*/
 		app_update();
 	}
     /* Loop forever */
