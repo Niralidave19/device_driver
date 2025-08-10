@@ -53,11 +53,12 @@ int main(void)
 int main(void)
 {
 	app_init();
-	check_receive();
+
 	while(1){
 		/* calling application update routine*/
 		/*check_receive();*/
 		/*app_address_req_update();*/
+		check_receive();
 		app_update();
 	}
     /* Loop forever */

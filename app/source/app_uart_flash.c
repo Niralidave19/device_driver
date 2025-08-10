@@ -49,11 +49,14 @@ unsigned char check_crc(unsigned int data, unsigned char framechkseq) {
 }
 
 void check_receive(){
-	uint8_t bytes[12];
+	uint8_t bytes[4];
 	uint8_t count = 0;
 	uint32_t size;
 	unsigned char crc;
+	unsigned char crc_check = 0;
 	uint32_t temp = 0xFFFFFF;
+	uint32_t num;
+	uint8_t x;
 	/* receive the request frame ID */
 	uint8_t rx_buff = app_req_frame();
 	/* if request frame ID == 0x3 Flash software */
@@ -66,76 +69,113 @@ void check_receive(){
 		}
 		/*erase sector*/
 		size = bytes[0]<<8 | bytes[1];
-		while(size/4 != 0){
-			/*get 3 bytes of data and 1 byte CRC */
+		/*sending ACK for sector erase*/
+		uart_write(0x1);
+		size = size/3;
+		while(size != 0){
+			/*get 4 bytes of data*/
 			for(int i=0;i<4;i++){
 				bytes[i] = uart_receive();
 			}
-			/*convert four bytes into an integer */
-			for(int i=0;i<4;i++)
-			{
-				uint32_t num = (bytes[i]<<24) | (bytes[i+1]<<16) | (bytes[i+2]<<8) | (bytes[i+3]);
-				/*check for CRC*/
-				crc = check_crc(num,0b10101010);
-				if(crc == 1){
-					num = (num & (temp << 7)) >> 7;
-				}
-				else{
-					uart_write(0x4);
-				}
+			num = (bytes[0]<<24) | (bytes[1]<<16) | (bytes[2]<<8) | (bytes[3]);
+			crc = check_crc(num,0b10101010);
+			if(crc == 1){
+				num >>= 7;
+				bytes[0] = num & 0xFF0000;
+				bytes[1] = num & 0x00FF00;
+				bytes[2] = num & 0x0000FF;
+				crc_check = (crc_check | !crc);
+			}
+			else{
+				/*corrupt data*/
+				uart_write(0xF);
 			}
 			size--;
+			/* ACK , send next 4 bytes */
+			uart_write(0x1);
 		}
+		x = 1;
 	}
 	else{
 		/*send NACK*/
-		uart_write(0x4);
+		uart_write(0xF);
 	}
 }
 
 void app_uart_flash_update(){
+	/* Write KEY1 */
+	FLASH->KEYR = 0x45670123;
+	FLASH->KEYR = 0xCDEF89AB;
 
-    uint8_t data[32];
-	/*sector erase*/
-    /* Unlock flash */
-    /* wait till FLash CR is unlocked */
-    while(FLASH->CR & FLASH_CR_LOCK);
-    /* Code reaching here indicates FLASH CR is unlocked */
+	/* wait till FLash CR is unlocked */
+	while(FLASH->CR & FLASH_CR_LOCK);
+	/* Code reaching here indicates FLASH CR is unlocked */
 
-    /* Wait till operation over */
-    while(FLASH->SR & FLASH_SR_BSY);
-    /* If interrupts are enabled check for EOP */
+	/* Wait till operation over */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* If interrupts are enabled check for EOP */
 
-    /* Write a byte to flash */
-    /* Set PSIZE (00 for byte writing) */
-    /* CLear 8th and 9th bit */
-    FLASH->CR &= ~(0x3 << FLASH_CR_PSIZE);
-    /* Set bits to correct value (0 in case of byte writing) */
-    FLASH->CR |= 0 << FLASH_CR_PSIZE;
+	/* Write a byte to flash */
+	/* Set PSIZE (00 for byte writing) */
+	/* CLear 8th and 9th bit */
+	FLASH->CR &= ~(0x3 << FLASH_CR_PSIZE);
+	/* Set bits to correct value (0 in case of byte writing) */
+	FLASH->CR |= 0 << FLASH_CR_PSIZE;
 
-    /* sector erase */
-    /* wait for flash operation to end */
-    while(FLASH->SR & FLASH_SR_BSY);
-    /* SER bit set */
-    FLASH->CR |= FLASH_CR_SER;
-    /* Clear SNB */
-    FLASH->CR &= ~(0xF << FLASH_CR_SNB);
-    /* Select sector 7 in SNB */
-    FLASH->CR |= (0x7 << FLASH_CR_SNB);
-    /* Start Sector clear */
-    FLASH->CR |= FLASH_CR_START;
-    /* Wait for end of operation */
-    while(FLASH->SR & FLASH_SR_BSY);
-    /* Clear SER */
-    FLASH->CR &= ~(FLASH_CR_SER);
-    /* Clear SNB */
-    FLASH->CR &= ~(0xF << FLASH_CR_SNB);
-    /* START gets cleared automatically */
-    /* Set programming bit */
-    FLASH->CR |= FLASH_CR_PG;
+	/* sector erase */
+	/* wait for flash operation to end */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* SER bit set */
+	FLASH->CR |= FLASH_CR_SER;
+	/* Clear SNB */
+	FLASH->CR &= ~(0xF << FLASH_CR_SNB);
+	/* Select sector 7 in SNB */
+	FLASH->CR |= (0x7 << FLASH_CR_SNB);
+	/* Start Sector clear */
+	FLASH->CR |= FLASH_CR_START;
+	/* Wait for end of operation */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Clear SER */
+	FLASH->CR &= ~(FLASH_CR_SER);
+	/* Clear SNB */
+	FLASH->CR &= ~(0xF << FLASH_CR_SNB);
+	/* START gets cleared automatically */
+	/* Set programming bit */
+	FLASH->CR |= FLASH_CR_PG;
+	/* write a byte */
+	*((uint8_t *)START_ADDR) = (uint8_t)0x22;
+	/* Wait for operation completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Clear programming bit */
+	FLASH->CR &= ~(FLASH_CR_PG);
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Flush caches */
+	/* Flush instruction cache  */
+	if ((FLASH->ACR & FLASH_ACR_ICEN) != 0)
+	{
+		/* Disable instruction cache  */
+		FLASH->ACR &= ~(FLASH_ACR_ICEN);
+		/* Reset instruction cache */
+		FLASH->ACR |= FLASH_ACR_ICRST;
+		/* Enable instruction cache */
+		FLASH->ACR |= FLASH_ACR_ICEN;
+	}
+	  /* Flush data cache */
+	if ((FLASH->ACR & FLASH_ACR_DCEN) != 0)
+	{
+		/* Disable data cache  */
+		FLASH->ACR &= ~(FLASH_ACR_DCEN);
+		/* Reset data cache */
+		FLASH->ACR |= FLASH_ACR_DCRST;
+		/* Enable data cache */
+		FLASH->ACR |= FLASH_ACR_DCEN;
+	}
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Lock flash */
+	FLASH->CR |= FLASH_CR_LOCK;
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
 
-
-
-	/* Server sends ACK indicating flash sector is erased - send data */
-	app_send_ACK();
 }
