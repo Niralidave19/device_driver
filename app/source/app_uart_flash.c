@@ -19,6 +19,10 @@
  * Server sends ACK
  * Clients sends data ... process continues till no. of bytes reached
  */
+void app_flash_write_unlock();
+void app_sector_erase();
+void app_write_byte();
+void app_flash_write_lock();
 
 unsigned char check_crc(unsigned int data, unsigned char framechkseq) {
     /*
