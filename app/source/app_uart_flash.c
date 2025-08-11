@@ -61,6 +61,7 @@ void check_receive(){
 	uint8_t rx_buff = app_req_frame();
 	/* if request frame ID == 0x3 Flash software */
 	if(rx_buff == 0x3){
+		app_flash_write_unlock();
 		/*send an ACK*/
 		uart_write(0x1);
 		/* Client sends total size of flash file */
@@ -69,6 +70,7 @@ void check_receive(){
 		}
 		/*erase sector*/
 		size = bytes[0]<<8 | bytes[1];
+		app_sector_erase();
 		/*sending ACK for sector erase*/
 		uart_write(0x1);
 		size = size/3;
@@ -84,6 +86,9 @@ void check_receive(){
 				bytes[0] = num & 0xFF0000;
 				bytes[1] = num & 0x00FF00;
 				bytes[2] = num & 0x0000FF;
+				app_write_byte(bytes[0]);
+				app_write_byte(bytes[1]);
+				app_write_byte(bytes[2]);
 				crc_check = (crc_check | !crc);
 			}
 			else{
@@ -95,13 +100,96 @@ void check_receive(){
 			uart_write(0x1);
 		}
 		x = 1;
+		/*ACK for flash write complete*/
+		uart_write(0x3);
+		app_lock_flash();
 	}
 	else{
 		/*send NACK*/
 		uart_write(0xF);
 	}
 }
+void app_flash_write_unlock(){
+	/* Write KEY1 */
+	FLASH->KEYR = 0x45670123;
+	FLASH->KEYR = 0xCDEF89AB;
 
+	/* wait till FLash CR is unlocked */
+	while(FLASH->CR & FLASH_CR_LOCK);
+	/* Code reaching here indicates FLASH CR is unlocked */
+
+	/* Wait till operation over */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* If interrupts are enabled check for EOP */
+
+	/* Write a byte to flash */
+	/* Set PSIZE (00 for byte writing) */
+	/* CLear 8th and 9th bit */
+	FLASH->CR &= ~(0x3 << FLASH_CR_PSIZE);
+	/* Set bits to correct value (0 in case of byte writing) */
+	FLASH->CR |= 0 << FLASH_CR_PSIZE;
+}
+void app_sector_erase(){
+		/* sector erase */
+	/* wait for flash operation to end */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* SER bit set */
+	FLASH->CR |= FLASH_CR_SER;
+	/* Clear SNB */
+	FLASH->CR &= ~(0xF << FLASH_CR_SNB);
+	/* Select sector 7 in SNB */
+	FLASH->CR |= (0x7 << FLASH_CR_SNB);
+	/* Start Sector clear */
+	FLASH->CR |= FLASH_CR_START;
+	/* Wait for end of operation */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Clear SER */
+	FLASH->CR &= ~(FLASH_CR_SER);
+	/* Clear SNB */
+	FLASH->CR &= ~(0xF << FLASH_CR_SNB);
+	/* START gets cleared automatically */
+	/* Set programming bit */
+	FLASH->CR |= FLASH_CR_PG;
+}
+void app_write_byte(){
+	*((uint8_t *)START_ADDR) = (uint8_t)0x22;
+}
+
+void app_lock_flash(){
+	/* Wait for operation completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Clear programming bit */
+	FLASH->CR &= ~(FLASH_CR_PG);
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Flush caches */
+	/* Flush instruction cache  */
+	if ((FLASH->ACR & FLASH_ACR_ICEN) != 0)
+	{
+		/* Disable instruction cache  */
+		FLASH->ACR &= ~(FLASH_ACR_ICEN);
+		/* Reset instruction cache */
+		FLASH->ACR |= FLASH_ACR_ICRST;
+		/* Enable instruction cache */
+		FLASH->ACR |= FLASH_ACR_ICEN;
+	}
+	  /* Flush data cache */
+	if ((FLASH->ACR & FLASH_ACR_DCEN) != 0)
+	{
+		/* Disable data cache  */
+		FLASH->ACR &= ~(FLASH_ACR_DCEN);
+		/* Reset data cache */
+		FLASH->ACR |= FLASH_ACR_DCRST;
+		/* Enable data cache */
+		FLASH->ACR |= FLASH_ACR_DCEN;
+	}
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+	/* Lock flash */
+	FLASH->CR |= FLASH_CR_LOCK;
+	/* Wait for completion */
+	while(FLASH->SR & FLASH_SR_BSY);
+}
 void app_uart_flash_update(){
 	/* Write KEY1 */
 	FLASH->KEYR = 0x45670123;
